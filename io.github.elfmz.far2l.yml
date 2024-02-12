@@ -1,0 +1,245 @@
+app-id: io.github.elfmz.far2l
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+
+command: far2l
+rename-desktop-file: far2l.desktop
+
+finish-args:
+  - --device=dri
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --filesystem=home
+  - --filesystem=/run/media
+  - --filesystem=/media
+  - --filesystem=/tmp
+  - --system-talk-name=org.freedesktop.UDisks2
+  - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=org.freedesktop.Notifications
+
+cleanup:
+  - /include
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /share/aclocal
+  - /share/doc
+  - /share/man
+  - '*.la'
+  - '*.a'
+modules:
+  - name: wxWidgets
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DwxUSE_AUI=OFF
+      - -DwxUSE_DEBUGREPORT=OFF
+      - -DwxUSE_HTML=OFF
+      - -DwxUSE_LIBMSPACK=OFF
+      - -DwxUSE_LIBSDL=OFF
+      - -DwxUSE_MEDIACTRL=OFF
+      - -DwxUSE_NANOSVG=OFF
+      - -DwxUSE_OPENGL=OFF
+      - -DwxUSE_PROPGRID=OFF
+      - -DwxUSE_PROTOCOL_FTP=OFF
+      - -DwxUSE_PROTOCOL_HTTP=OFF
+      - -DwxUSE_RIBBON=OFF
+      - -DwxUSE_RICHTEXT=OFF
+      - -DwxUSE_SOCKETS=OFF
+      - -DwxUSE_STC=OFF
+      - -DwxUSE_WEBVIEW=OFF
+      - -DwxUSE_WXHTML_HELP=OFF
+      - -DwxUSE_XML=OFF
+      - -DwxUSE_XRC=OFF
+    cleanup:
+      - /bin
+      - /lib/wx
+    sources:
+      - type: archive
+        url: https://github.com/wxWidgets/wxWidgets/releases/download/v3.2.4/wxWidgets-3.2.4.tar.bz2
+        sha256: 0640e1ab716db5af2ecb7389dbef6138d7679261fbff730d23845ba838ca133e
+        x-checker-data:
+          type: anitya
+          project-id: 5150
+          stable-only: true
+          url-template: https://github.com/wxWidgets/wxWidgets/releases/download/v$version/wxWidgets-$version.tar.bz2
+
+  - name: libssh
+    buildsystem: cmake-ninja
+    builddir: true
+    sources:
+      - type: archive
+        url: https://git.libssh.org/projects/libssh.git/snapshot/libssh-0.10.6.tar.gz
+        sha256: 5789613288c3dea7348f51f7de68cd7f54316b063906561f92b44dafb01ae387
+        x-checker-data:
+          type: anitya
+          project-id: 1729
+          url-template: https://git.libssh.org/projects/libssh.git/snapshot/libssh-$version.tar.gz
+
+  - name: uchardet
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DBUILD_STATIC=0
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.8.tar.xz
+        sha256: e97a60cfc00a1c147a674b097bb1422abd9fa78a2d9ce3f3fdcc2e78a34ac5f0
+        x-checker-data:
+          type: anitya
+          project-id: 9265
+          url-template: https://www.freedesktop.org/software/uchardet/releases/uchardet-$version.tar.xz
+
+  - name: Xerces-C
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-3.2.5.tar.xz
+        sha256: 6239e6035645b21bc9bf7f02004db334dce3fe6d85428ee4fe7e180c2d948230
+        x-checker-data:
+          type: anitya
+          project-id: 5182
+          url-template: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-$version.tar.xz
+
+  - name: smbclient
+    buildsystem: autotools
+    # buildsystem: simple
+    build-options:
+      env:
+        PERL5LIB: /app/lib/perl5
+    # build-commands:
+    #   - ./configure --prefix=/app --disable-cups --disable-glusterfs --disable-iprint --disable-python --without-acl-support --without-ad-dc --without-ads --without-automount --without-cluster-support --without-gettext --without-json --without-ldap --without-ldb-lmdb --without-libarchive --without-pam --without-quotas --without-regedit --without-syslog --without-systemd --without-utmp --without-winbind || cat ./bin/config.log
+    #   - make bin/smbclient -j $FLATPAK_BUILDER_N_JOBS
+    #   - make install
+    config-opts:
+      - --disable-cups
+      - --disable-glusterfs
+      - --disable-iprint
+      - --disable-python
+      - --without-acl-support
+      - --without-ad-dc
+      - --without-ads
+      - --without-automount
+      - --without-cluster-support
+      - --without-gettext
+      - --without-json
+      - --without-ldap
+      - --without-ldb-lmdb
+      - --without-libarchive
+      - --without-pam
+      - --without-quotas
+      - --without-regedit
+      - --without-syslog
+      - --without-systemd
+      - --without-utmp
+      - --without-winbind
+    cleanup:
+      - /bin
+      - /bind-dns
+      - /etc
+      - /sbin
+      - /lib/idmap
+      - /lib/krb5
+      - /lib/ldb
+      - /lib/nss_info
+      - /lib/vfs
+      - /libexec
+      - /private
+      - /var
+    sources:
+      - type: archive
+        url: https://download.samba.org/pub/samba/stable/samba-4.19.4.tar.gz
+        sha256: 4026d93b866db198c8ca1685b0f5d52793f65c6e63cb364163af661fdff0968c
+        x-checker-data:
+          type: anitya
+          project-id: 4758
+          url-template: https://download.samba.org/pub/samba/stable/samba-$version.tar.gz
+      - type: patch
+        path: patches/samba-remove-setuid.patch
+    modules:
+      - name: parse-yapp
+        buildsystem: simple
+        build-commands:
+          - perl Makefile.PL INSTALL_BASE=/app
+          - make
+          - make install
+        cleanup: ['*']
+        sources:
+          - type: archive
+            url: https://cpan.metacpan.org/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz
+            sha256: 3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5
+
+  - name: libnfs
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/sahlberg/libnfs/archive/libnfs-5.0.3.tar.gz
+        sha256: d945cb4f4c8f82ee1f3640893a168810f794a28e1010bb007ec5add345e9df3e
+        x-checker-data:
+          type: anitya
+          project-id: 7325
+          url-template: https://github.com/sahlberg/libnfs/archive/libnfs-$version.tar.gz
+
+  - name: neon
+    buildsystem: autotools
+    make-args:
+      - all
+      - docs
+    config-opts:
+      - --enable-shared
+      - --enable-threadsafe-ssl=posix
+      - --disable-debug
+      - --disable-nls
+      - --disable-static
+      - --with-ssl=openssl
+    cleanup:
+      - /bin
+    sources:
+      - type: archive
+        url: https://github.com/notroj/neon/archive/refs/tags/0.33.0.tar.gz
+        sha256: d0c9da641282881d0d1cf66ac90d982498832d8ebcd7e6b116abfb2b303fcbad
+        x-checker-data:
+          type: anitya
+          project-id: 7604
+          url-template: https://github.com/notroj/neon/archive/refs/tags/$version.tar.gz
+    modules:
+      - name: xmlto
+        buildsystem: autotools
+        cleanup: ['*']
+        sources:
+          - type: archive
+            url: https://releases.pagure.org/xmlto/xmlto-0.0.28.tar.bz2
+            sha256: 1130df3a7957eb9f6f0d29e4aa1c75732a7dfb6d639be013859b5c7ec5421276
+
+  - name: far2l
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_VERBOSE_MAKEFILE=ON
+    post-install:
+      - install -vDm644 ../${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo
+    sources:
+      - type: git
+        url: https://github.com/elfmz/far2l.git
+      - type: file
+        path: io.github.elfmz.far2l.metainfo.xml
+      - type: patch
+        paths:
+          - patches/far2l-src-cfg-ConfigOpt.cpp.patch

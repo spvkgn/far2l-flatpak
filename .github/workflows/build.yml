@@ -1,0 +1,96 @@
+name: build
+run-name: 🌙 Nightly build 🚀 ${{ github.event.client_payload.tag }}-${{ github.event.client_payload.date }}-${{ github.event.client_payload.sha }}
+
+on:
+  repository_dispatch:
+    types: [build-nightly]
+
+jobs:
+  # flatpak:
+  #   name: Flatpak
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: bilelmoussaoui/flatpak-github-actions:freedesktop-23.08
+  #     options: --privileged
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
+  #   - name: Build Flatpak
+  #     uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+  #     with:
+  #       bundle: far2l.flatpak
+  #       manifest-path: io.github.elfmz.far2l.yml
+  #       cache-key: flatpak-builder-${{ github.sha }}
+  #       verbose: true
+
+  flatter:
+    name: Flatter
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/andyholmes/flatter/freedesktop:23.08
+      options: --privileged
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        arch: [x86_64]
+      fail-fast: false
+      max-parallel: 1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Bump version in metainfo
+        env:
+          TAG: ${{ github.event.client_payload.tag }}
+          DATE: ${{ github.event.client_payload.date }}
+        run: |
+          dnf -qy install xmlstarlet
+          xmlstarlet ed -L -P -u "component/releases/release/@type" -v "development" \
+            -u "component/releases/release/@version" -v "$TAG-beta" \
+            -u "component/releases/release/@date" -v "$(date -d $DATE +%F)" io.github.elfmz.far2l.metainfo.xml
+
+      - name: Build Flatpak
+        id: flatpak
+        uses: andyholmes/flatter@main
+        with:
+          files: io.github.elfmz.far2l.yml
+          arch: ${{ matrix.arch }}
+          upload-bundles: true
+
+      - name: Deploy to GH Pages
+        id: deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          folder: ${{ steps.flatpak.outputs.repository }}
+          commit-message: 'Deploying'
+          single-commit: true
+
+      - name: Release Flatpak bundle
+        uses: andelf/nightly-release@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: false
+          tag_name: latest
+          name: ${{ github.event.client_payload.date }}
+          body: |
+            ${{ github.event.client_payload.url }}: ${{ github.event.client_payload.message }}
+          files: |
+            ./**/*.flatpak
+
+      - name: Update version for badge
+        if: steps.deploy.outcome == 'success'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: f53cb6c1d56b0eaf40c88d607fc5fef1
+          filename: far2l-flatpak.json
+          label: version
+          message: ${{ github.event.client_payload.tag }}-${{ github.event.client_payload.date }}-${{ github.event.client_payload.sha }}
+          color: blue
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        continue-on-error: true

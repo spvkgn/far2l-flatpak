@@ -1,0 +1,29 @@
+--- a/far2l/src/cfg/ConfigOpt.cpp
++++ b/far2l/src/cfg/ConfigOpt.cpp
+@@ -157,7 +157,7 @@ const ConfigOpt g_cfg_opts[] {
+ 	{true,  NSecInterface, "ExclusiveWinLeft", &Opt.ExclusiveWinLeft, 0},
+ 	{true,  NSecInterface, "ExclusiveWinRight", &Opt.ExclusiveWinRight, 0},
+ 
+-	{true,  NSecInterface, "OSC52ClipSet", &Opt.OSC52ClipSet, 0},
++	{true,  NSecInterface, "OSC52ClipSet", &Opt.OSC52ClipSet, 1},
+ 	{true,  NSecInterface, "TTYPaletteOverride", &Opt.TTYPaletteOverride, 1},
+ 
+ 	{false, NSecInterface, "ShowTimeoutDelFiles", &Opt.ShowTimeoutDelFiles, 50},
+@@ -247,7 +247,7 @@ const ConfigOpt g_cfg_opts[] {
+ 	{true,  NSecSystem, "SaveFoldersHistory", &Opt.SaveFoldersHistory, 1},
+ 	{false, NSecSystem, "SavePluginFoldersHistory", &Opt.SavePluginFoldersHistory, 0},
+ 	{true,  NSecSystem, "SaveViewHistory", &Opt.SaveViewHistory, 1},
+-	{true,  NSecSystem, "AutoSaveSetup", &Opt.AutoSaveSetup, 0},
++	{true,  NSecSystem, "AutoSaveSetup", &Opt.AutoSaveSetup, 1},
+ 	{true,  NSecSystem, "DeleteToRecycleBin", &Opt.DeleteToRecycleBin, 0},
+ 	{true,  NSecSystem, "DeleteToRecycleBinKillLink", &Opt.DeleteToRecycleBinKillLink, 1},
+ 	{false, NSecSystem, "WipeSymbol", &Opt.WipeSymbol, 0},
+@@ -272,7 +272,7 @@ const ConfigOpt g_cfg_opts[] {
+ 	{true,  NSecSystem, "DriveDisconnectMode", &Opt.ChangeDriveDisconnectMode, 1},
+ 
+ 	{true,  NSecSystem, "DriveExceptions", &Opt.ChangeDriveExceptions,
+-		L"/System/*;/proc;/proc/*;/sys;/sys/*;/dev;/dev/*;/run;/run/*;/tmp;/snap;/snap/*;/private;/private/*;/var/lib/lxcfs;/var/snap/*;/var/spool/cron;/tmp/.*"},
++		L"/System/*;/proc;/proc/*;/sys;/sys/*;/dev;/dev/*;/run;/run/*;/tmp;/snap;/snap/*;/private;/private/*;/var/lib/lxcfs;/var/snap/*;/var/spool/cron;/tmp/.*;/app;/usr;/usr/*;/etc/*;/var/*;/.flatpak-info"},
+ 	{true,  NSecSystem, "DriveColumn2", &Opt.ChangeDriveColumn2, L"$U$</$>$T"},
+ 	{true,  NSecSystem, "DriveColumn3", &Opt.ChangeDriveColumn3, L"$S$D"},
+ 

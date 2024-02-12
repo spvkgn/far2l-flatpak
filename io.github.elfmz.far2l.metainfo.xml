@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.elfmz.far2l</id>
+  
+  <name>far2l</name>
+  <summary>Linux port of FAR Manager v2</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>GPL-2.0-only</project_license>
+  
+  <description>
+    <p>
+      FAR2L is a text mode file and archive manager that provides a wide set of file and folder operations.
+    </p>
+  </description>
+  
+  <releases>
+    <release type="" version="" date="" />
+  </releases>
+  
+  <launchable type="desktop-id">far2l.desktop</launchable>
+</component>

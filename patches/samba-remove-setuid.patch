@@ -1,0 +1,52 @@
+--- a/source3/wscript
++++ b/source3/wscript
+@@ -130,7 +130,7 @@ def configure(conf):
+     conf.CHECK_FUNCS('setsid glob strpbrk crypt16 getauthuid')
+     conf.CHECK_FUNCS('innetgr')
+     conf.CHECK_FUNCS('initgroups select poll rdchk getgrnam getgrent pathconf')
+-    conf.CHECK_FUNCS('setpriv setgidx setuidx setgroups syscall sysconf')
++    conf.CHECK_FUNCS('setpriv setgidx setgroups syscall sysconf')
+     conf.CHECK_FUNCS('atexit grantpt posix_openpt fallocate')
+     conf.CHECK_FUNCS('fseeko setluid')
+     conf.CHECK_FUNCS('getpwnam', headers='sys/types.h pwd.h')
+@@ -420,7 +420,6 @@ setmntent
+ setpgid
+ setpriv
+ setsid
+-setuidx
+ statvfs
+ strcasecmp
+ strchr
+@@ -1037,18 +1036,6 @@ syscall(SYS_setgroups32, 0, NULL);
+                                 addmain=False,
+                                 execute=True,
+                                 msg="Checking whether seteuid is available")
+-    if not seteuid:
+-        seteuid = conf.CHECK_CODE('''
+-                                #define AUTOCONF_TEST 1
+-                                #define USE_SETUIDX 1
+-                                #include "../lib/util/setid.c"
+-                                #include "./lib/util_sec.c"
+-                                ''',
+-                                'USE_SETUIDX',
+-                                addmain=False,
+-                                execute=True,
+-                                mandatory=True,
+-                                msg="Checking whether setuidx is available")
+     # valgrind.h or valgrind/valgrind.h is checked in lib/replace/wscript
+     if Options.options.developer:
+         if conf.CONFIG_SET('HAVE_VALGRIND_H') or conf.CONFIG_SET('HAVE_VALGRIND_VALGRIND_H'):
+--- a/tests/summary.c
++++ b/tests/summary.c
+@@ -12,9 +12,9 @@ int main(void)
+ #warning "WARNING: No automated network interface determination"
+ #endif
+ 
+-#if !(defined(USE_SETEUID) || defined(USE_SETREUID) || defined(USE_SETRESUID) || defined(USE_SETUIDX) || defined(HAVE_LINUX_THREAD_CREDENTIALS))
++/* #if !(defined(USE_SETEUID) || defined(USE_SETREUID) || defined(USE_SETRESUID) || defined(USE_SETUIDX) || defined(HAVE_LINUX_THREAD_CREDENTIALS))
+ #error "ERROR: no seteuid method available"
+-#endif
++#endif */
+ 
+ #if !(defined(STAT_STATVFS) || defined(STAT_STATFS3_OSF1) || defined(STAT_STATFS2_BSIZE) || defined(STAT_STATFS4) || defined(STAT_STATFS2_FSIZE) || defined(STAT_STATFS2_FS_DATA))
+ #error "ERROR: No disk free routine!"
