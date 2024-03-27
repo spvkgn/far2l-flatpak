@@ -64,6 +64,8 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
           folder: ${{ steps.flatpak.outputs.repository }}
+          git-config-name: 'github-actions[bot]'
+          git-config-email: 'github-actions[bot]@users.noreply.github.com'
           commit-message: 'Deploying'
           single-commit: true
 
