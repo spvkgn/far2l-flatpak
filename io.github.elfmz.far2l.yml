@@ -96,22 +96,6 @@ modules:
           project-id: 9265
           url-template: https://www.freedesktop.org/software/uchardet/releases/uchardet-$version.tar.xz
 
-  - name: Xerces-C
-    buildsystem: cmake-ninja
-    builddir: true
-    config-opts:
-      - -DCMAKE_BUILD_TYPE=Release
-    cleanup:
-      - /bin
-    sources:
-      - type: archive
-        url: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-3.2.5.tar.xz
-        sha256: 6239e6035645b21bc9bf7f02004db334dce3fe6d85428ee4fe7e180c2d948230
-        x-checker-data:
-          type: anitya
-          project-id: 5182
-          url-template: https://dlcdn.apache.org/xerces/c/3/sources/xerces-c-$version.tar.xz
-
   - name: smbclient
     buildsystem: autotools
     # buildsystem: simple
