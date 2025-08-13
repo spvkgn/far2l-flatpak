@@ -217,6 +217,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
       - -DCMAKE_VERBOSE_MAKEFILE=ON
+      - -DARCLITE=OFF
     post-install:
       - install -vDm644 ../${FLATPAK_ID}.metainfo.xml -t /app/share/metainfo
     sources:
