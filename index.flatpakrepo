@@ -1,0 +1,6 @@
+[Flatpak Repo]
+Title=far2l-flatpak
+Description=FAR2L File Manager - Flatpak build
+Url=https://spvkgn.github.io/far2l-flatpak
+Homepage=https://github.com/spvkgn/far2l-flatpak
+Icon=https://raw.githubusercontent.com/flatpak/flatpak/main/flatpak.png
